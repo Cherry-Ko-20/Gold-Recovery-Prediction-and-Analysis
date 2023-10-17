@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 from sklearn.metrics import mean_absolute_error 
 import matplotlib.pyplot as plt
+from sklearn.preprocessing import StandardScaler
 
 train= pd.read_csv('files/gold_recovery_train.csv')
 source=pd.read_csv('files/gold_recovery_full.csv')
@@ -43,3 +44,15 @@ missing_columns_list = list(missing_columns)
 missing_columns_types = train[missing_columns_list].dtypes
 print("Missing columns:", missing_columns)
 print("Data types of missing columns:", missing_columns_types) 
+
+
+# Perform Data Processing 
+
+# Handle Missing Values
+train.dropna(inplace=True)
+test.dropna(inplace=True)
+
+
+
+
+
