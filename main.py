@@ -17,6 +17,9 @@ print(missing_values)
 train[train['rougher.output.recovery'].notna()]['rougher.output.recovery']
 print(train['rougher.output.recovery'])
 
+#  the top 10 non-NaN values from the 'rougher.output.recovery' column 
+top_10_recovery_values =train[train['rougher.output.recovery'].notna()]['rougher.output.recovery'].sort_values(ascending=False).head(10)
+print(top_10_recovery_values)
 
 # Calculate recovery
 train['recovery_calc'] = (train['rougher.output.concentrate_au'] *
