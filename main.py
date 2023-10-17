@@ -10,8 +10,12 @@ print(train.info())
 print(source.info())
 print(test.info())
 
+missing_values= train.isnull().sum()
+print(missing_values)
 
-#Check that recovery is calculated correctly 
+# #Check that recovery is calculated correctly 
+train[train['rougher.output.recovery'].notna()]['rougher.output.recovery']
+print(train['rougher.output.recovery'])
 
 
 # Calculate recovery
