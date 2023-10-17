@@ -28,3 +28,10 @@ train['recovery_calc'] = (train['rougher.output.concentrate_au'] *
                                (train['rougher.output.concentrate_au'] - train['rougher.output.tail_au'])) * 100
 print(train['recovery_calc'])
 
+train['rougher.output.recovery'] = train ['rougher.output.recovery'].fillna(0)
+train['recovery_calc'] = train['recovery_calc'].fillna(0)
+print(train)
+
+# Calculate MAE
+mae = mean_absolute_error(train['rougher.output.recovery'], train['recovery_calc'].notna())
+print("Mean Absolute Error (MAE):", mae)
