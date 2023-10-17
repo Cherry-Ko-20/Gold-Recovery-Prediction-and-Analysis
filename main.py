@@ -35,3 +35,11 @@ print(train)
 # Calculate MAE
 mae = mean_absolute_error(train['rougher.output.recovery'], train['recovery_calc'].notna())
 print("Mean Absolute Error (MAE):", mae)
+
+# Analyze the features not available in the test set
+
+missing_columns = set(train.columns) - set(test.columns)
+missing_columns_list = list(missing_columns)
+missing_columns_types = train[missing_columns_list].dtypes
+print("Missing columns:", missing_columns)
+print("Data types of missing columns:", missing_columns_types) 
