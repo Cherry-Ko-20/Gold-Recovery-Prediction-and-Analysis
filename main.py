@@ -74,4 +74,14 @@ plt.tight_layout()
 plt.show()
 
 
+# 2.2. Compare the feed particle size distributions in the training set and the test set
+plt.figure(figsize=(10, 6))
 
+plt.hist(train['rougher.input.feed_size'], bins=50, label='Training Set', alpha=0.7)
+plt.hist(test['rougher.input.feed_size'], bins=50, label='Test Set', alpha=0.7)
+plt.xlabel('Feed Particle Size')
+plt.ylabel('Frequency')
+plt.title('Feed Particle Size Distribution Comparison')
+plt.legend()
+
+plt.show()
