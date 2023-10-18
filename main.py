@@ -52,7 +52,26 @@ print("Data types of missing columns:", missing_columns_types)
 train.dropna(inplace=True)
 test.dropna(inplace=True)
 
+# Analyze the data 
+# Create subplots to visualize concentration changes
+fig, axes = plt.subplots(nrows=1, ncols=3, figsize=(15, 5))
 
+# List of metals
+metals = ['au', 'ag', 'pb']
+
+# Iterate through the metals and plot their concentration changes
+for i, metal in enumerate(metals):
+    # Train data
+    train[f'rougher.output.concentrate_{metal}'].plot(ax=axes[i], label='Raw Feed', legend=True)
+    train[f'primary_cleaner.output.concentrate_{metal}'].plot(ax=axes[i], label='Rougher Concentrate', legend=True)
+    train[f'final.output.concentrate_{metal}'].plot(ax=axes[i], label='Final Concentrate', legend=True)
+
+    axes[i].set_title(f'Concentration of {metal}')
+    axes[i].set_xlabel('Sample Index')
+    axes[i].set_ylabel('Concentration')
+
+plt.tight_layout()
+plt.show()
 
 
 
