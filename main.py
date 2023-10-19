@@ -92,6 +92,15 @@ plt.tight_layout()
 plt.show()
 
 
+# Calculate the total concentrations at different stages
+train['total_concentration_raw'] = train.filter(like='raw', axis=1).sum(axis=1)
+train['total_concentration_rougher'] = train.filter(like='rougher', axis=1).sum(axis=1)
+train['total_concentration_final'] = train.filter(like='final', axis=1).sum(axis=1)
+
+# Examine summary statistics
+print("Summary Statistics of Total Concentrations:")
+print(train[['total_concentration_raw', 'total_concentration_rougher', 'total_concentration_final']].describe())
+
 # Compare the feed particle size distributions in the training set and the test set
 plt.figure(figsize=(10, 6))
 
@@ -103,13 +112,4 @@ plt.title('Feed Particle Size Distribution Comparison')
 plt.legend()
 
 plt.show()
-
-# Calculate the total concentrations at different stages
-train['total_concentration_raw'] = train.filter(like='raw', axis=1).sum(axis=1)
-train['total_concentration_rougher'] = train.filter(like='rougher', axis=1).sum(axis=1)
-train['total_concentration_final'] = train.filter(like='final', axis=1).sum(axis=1)
-
-# Examine summary statistics
-print("Summary Statistics of Total Concentrations:")
-print(train[['total_concentration_raw', 'total_concentration_rougher', 'total_concentration_final']].describe())
 
