@@ -3,6 +3,16 @@ import numpy as np
 from sklearn.metrics import mean_absolute_error 
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import train_test_split, cross_val_score
+from sklearn.linear_model import LinearRegression
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.metrics import mean_squared_error
+from sklearn.metrics import make_scorer
+from scipy.stats import randint
+from sklearn.model_selection import RandomizedSearchCV
+from sklearn.metrics import mean_squared_error
+from math import sqrt
+from sklearn.model_selection import GridSearchCV
 
 train= pd.read_csv('files/gold_recovery_train.csv')
 source=pd.read_csv('files/gold_recovery_full.csv')
@@ -23,11 +33,19 @@ top_10_recovery_values =train[train['rougher.output.recovery'].notna()]['rougher
 print(top_10_recovery_values)
 
 # Calculate recovery
-train['recovery_calc'] = (train['rougher.output.concentrate_au'] *
-                               (train['rougher.input.feed_au'] - train['rougher.output.tail_au'])) / \
-                              (train['rougher.input.feed_au'] *
-                               (train['rougher.output.concentrate_au'] - train['rougher.output.tail_au'])) * 100
+# Calculate recovery with handling division by zero
+def calculate_recovery(row):
+    if row['rougher.input.feed_au'] == 0 or row['rougher.output.concentrate_au'] == 0:
+        return 0
+    else:
+        return (row['rougher.output.concentrate_au'] *
+                (row['rougher.input.feed_au'] - row['rougher.output.tail_au'])) / \
+                (row['rougher.input.feed_au'] *
+                (row['rougher.output.concentrate_au'] - row['rougher.output.tail_au'])) * 100
+
+train['recovery_calc'] = train.apply(calculate_recovery, axis=1)
 print(train['recovery_calc'])
+
 
 train['rougher.output.recovery'] = train ['rougher.output.recovery'].fillna(0)
 train['recovery_calc'] = train['recovery_calc'].fillna(0)
