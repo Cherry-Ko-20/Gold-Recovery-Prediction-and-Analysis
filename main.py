@@ -71,7 +71,7 @@ train = train.fillna(method='ffill')
 test = test.fillna(method='ffill')
 source = source.fillna(method='ffill')
 
-# Analyze the data 
+
 # Create subplots to visualize concentration changes
 fig, axes = plt.subplots(nrows=1, ncols=3, figsize=(15, 5))
 
@@ -80,7 +80,6 @@ metals = ['au', 'ag', 'pb']
 
 # Iterate through the metals and plot their concentration changes
 for i, metal in enumerate(metals):
-    # Train data
     train[f'rougher.output.concentrate_{metal}'].plot(ax=axes[i], label='Raw Feed', legend=True)
     train[f'primary_cleaner.output.concentrate_{metal}'].plot(ax=axes[i], label='Rougher Concentrate', legend=True)
     train[f'final.output.concentrate_{metal}'].plot(ax=axes[i], label='Final Concentrate', legend=True)
