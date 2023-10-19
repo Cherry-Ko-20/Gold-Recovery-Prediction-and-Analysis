@@ -119,3 +119,41 @@ def calculate_smape(y_true, y_pred):
     diff = np.abs(y_true - y_pred) / denominator
     smape = 100 * np.mean(diff)
     return smape
+
+
+# Create a custom scorer for sMAPE
+smape_scorer = make_scorer(calculate_smape, greater_is_better=False)
+
+# Define the features and target variable
+features = train.drop(['date', 'final.output.recovery'], axis=1)
+target = train['final.output.recovery']
+
+# Split the training data into training and validation sets
+X_train, X_val, y_train, y_val = train_test_split(features, target, test_size=0.2, random_state=42)
+
+# Train a Random Forest Regressor model
+rf_model = RandomForestRegressor(n_estimators=100, random_state=42)  
+rf_model.fit(X_train, y_train)
+
+# Perform cross-validation to evaluate the model
+smape_scores = -cross_val_score(rf_model, X_train, y_train, cv=3, scoring=smape_scorer)
+
+# Calculate the mean sMAPE score
+mean_smape = smape_scores.mean()
+print(f"Mean sMAPE on cross-validation: {mean_smape:.2f}%")
+
+
+from sklearn.linear_model import LinearRegression
+
+# Create a Linear Regression model
+lr_model = LinearRegression()
+
+# Train the Linear Regression model
+lr_model.fit(X_train, y_train)
+
+# Perform cross-validation for Linear Regression
+lr_smape_scores = -cross_val_score(lr_model, X_train, y_train, cv=3, scoring=smape_scorer)
+
+# Calculate the mean sMAPE score for Linear Regression
+mean_lr_smape = lr_smape_scores.mean()
+print(f"Mean sMAPE for Linear Regression on cross-validation: {mean_lr_smape:.2f}%")
