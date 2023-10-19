@@ -66,9 +66,10 @@ print("Data types of missing columns:", missing_columns_types)
 
 # Perform Data Processing 
 
-# Handle Missing Values
-train.dropna(inplace=True)
-test.dropna(inplace=True)
+# Fill missing values in all datasets with 0
+train = train.fillna(method='ffill')
+test = test.fillna(method='ffill')
+source = source.fillna(method='ffill')
 
 # Analyze the data 
 # Create subplots to visualize concentration changes
