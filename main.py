@@ -47,9 +47,9 @@ train['recovery_calc'] = train.apply(calculate_recovery, axis=1)
 print(train['recovery_calc'])
 
 
-train['rougher.output.recovery'] = train ['rougher.output.recovery'].fillna(0)
-train['recovery_calc'] = train['recovery_calc'].fillna(0)
-print(train)
+# Fill NaN values with 0
+train['rougher.output.recovery'] = train['rougher.output.recovery'].fillna(method='ffill')
+train['recovery_calc'] = train['recovery_calc'].fillna(method='ffill')
 
 # Calculate MAE
 mae = mean_absolute_error(train['rougher.output.recovery'], train['recovery_calc'].notna())
