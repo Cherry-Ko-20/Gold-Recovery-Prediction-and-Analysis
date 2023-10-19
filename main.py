@@ -113,3 +113,9 @@ plt.legend()
 
 plt.show()
 
+# Define a function to calculate sMAPE
+def calculate_smape(y_true, y_pred):
+    denominator = (np.abs(y_true) + np.abs(y_pred)) / 2
+    diff = np.abs(y_true - y_pred) / denominator
+    smape = 100 * np.mean(diff)
+    return smape
