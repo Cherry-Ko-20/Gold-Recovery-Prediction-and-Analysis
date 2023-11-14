@@ -2,17 +2,21 @@ import pandas as pd
 import numpy as np
 from sklearn.metrics import mean_absolute_error 
 import matplotlib.pyplot as plt
-from sklearn.preprocessing import StandardScaler
-from sklearn.model_selection import train_test_split, cross_val_score
+from scipy import stats as st
 from sklearn.linear_model import LinearRegression
-from sklearn.ensemble import RandomForestRegressor
-from sklearn.metrics import mean_squared_error
-from sklearn.metrics import make_scorer
 from scipy.stats import randint
 from sklearn.model_selection import RandomizedSearchCV
-from sklearn.metrics import mean_squared_error
 from math import sqrt
 from sklearn.model_selection import GridSearchCV
+import seaborn as sns
+from sklearn.model_selection import *
+from sklearn.tree import *
+from sklearn.ensemble import *
+from sklearn.dummy import DummyRegressor 
+from sklearn.linear_model import LinearRegression
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import *
+from sklearn.utils import shuffle
 
 train= pd.read_csv('files/gold_recovery_train.csv')
 source=pd.read_csv('files/gold_recovery_full.csv')
@@ -157,3 +161,14 @@ lr_smape_scores = -cross_val_score(lr_model, X_train, y_train, cv=3, scoring=sma
 # Calculate the mean sMAPE score for Linear Regression
 mean_lr_smape = lr_smape_scores.mean()
 print(f"Mean sMAPE for Linear Regression on cross-validation: {mean_lr_smape:.2f}%")
+
+
+# Define the features in the test set
+test_features = test.drop(['date', 'final.output.recovery'], axis=1)
+
+# Predict 'final.output.recovery' values in the test set
+test_predictions = rf_model.predict(test_features)
+
+# Calculate the final sMAPE value for the test dataset
+final_sMAPE = calculate_smape(test['final.output.recovery'], test_predictions)
+print(f"Final sMAPE on the test dataset: {final_sMAPE:.2f}%")
