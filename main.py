@@ -91,7 +91,7 @@ print(test_updated)
 
 #dropping any rows that still have missing values 
 source.dropna(how='any', inplace=True, axis=0)
-train_updated.dropna(how='any', inplace=True, axis=0)
+train_updated= train_updated.dropna(how='any', inplace=True, axis=0)
 test_updated.dropna(how='any', inplace=True, axis=0)
 
 # Create subplots to visualize concentration changes
@@ -225,3 +225,41 @@ grid_search.fit(X_train, y_train)
 best_rf_model = grid_search.best_estimator_
 
 print("Mean sMAPE for the best Random Forest model:", np.abs(grid_search.best_score_))
+
+
+test_targets = source_update[source_update['date'].isin(test['date'])][['date', 'rougher.output.recovery', 'final.output.recovery']]
+
+# Extract the target values
+test_updated_target = test_targets[['rougher.output.recovery', 'final.output.recovery']]
+
+
+# Extract test_updated_features
+test_updated_features = test_updated.drop(columns=['date'])
+
+
+# Extract test_updated_target
+
+test_features = test_updated_features.values
+test_predictions = best_rf_model.predict(test_features)
+
+# 5. Calculate the final sMAPE for the model's predictions on the test data
+test_smape = final_smape(test_updated_target.values, test_predictions)
+print("Final sMAPE for the best Random Forest model on the test dataset:", test_smape)
+
+
+# Create a constant baseline model using the mean of the training target
+baseline_model = DummyRegressor(strategy="mean")
+baseline_model.fit(X_train, y_train)
+
+# Make predictions using the baseline model
+baseline_predictions = baseline_model.predict(test_features)
+
+# Calculate the final sMAPE for the baseline model's predictions on the test data
+baseline_smape = final_smape(test_updated_target.values, baseline_predictions)
+print("Final sMAPE for the Constant Baseline Model on the test dataset:", baseline_smape)
+
+# Compare the final sMAPE of the model with that of the constant baseline
+if test_smape < baseline_smape:
+    print("The final model performs better than the Constant Baseline.")
+else:
+    print("The Constant Baseline outperforms the final model.")
