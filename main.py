@@ -122,3 +122,18 @@ train['total_concentration_final'] = train.filter(like='final.output.concentrate
 print("Summary Statistics of Total Concentrations:")
 print(train[['total_concentration_raw', 'total_concentration_rougher', 'total_concentration_final']].describe())
 
+# Create subplots to visualize the histograms of total concentrations
+fig, axes = plt.subplots(nrows=1, ncols=3, figsize=(20, 5))
+
+# List of total concentration variables
+total_concentration_variables = ['total_concentration_raw', 'total_concentration_rougher', 'total_concentration_final']
+
+# Iterate through the total concentration variables and plot histograms
+for i, concentration_variable in enumerate(total_concentration_variables):
+    train[concentration_variable].plot.hist(ax=axes[i], bins=30, color='skyblue', edgecolor='black')
+    axes[i].set_title(f'Histogram of {concentration_variable}')
+    axes[i].set_xlabel('Total Concentration')
+    axes[i].set_ylabel('Frequency')
+
+plt.tight_layout()
+plt.show()
