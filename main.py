@@ -93,3 +93,22 @@ print(test_updated)
 source.dropna(how='any', inplace=True, axis=0)
 train_updated.dropna(how='any', inplace=True, axis=0)
 test_updated.dropna(how='any', inplace=True, axis=0)
+
+# Create subplots to visualize concentration changes
+fig, axes = plt.subplots(nrows=1, ncols=3, figsize=(20, 5))
+
+# List of metals
+metals = ['au', 'ag', 'pb']
+
+# Iterate through the metals and plot their concentration changes
+for i, metal in enumerate(metals):
+    train[f'rougher.input.feed_{metal}'].plot.hist(ax=axes[i], label='Raw Feed', legend=True)
+    train[f'rougher.output.concentrate_{metal}'].plot.hist(ax=axes[i], label='Rougher Concentrate', legend=True)
+    train[f'final.output.concentrate_{metal}'].plot.hist(ax=axes[i], label='Final Concentrate', legend=True)
+
+    axes[i].set_title(f'Concentration of {metal}')
+    axes[i].set_xlabel('Sample Index')
+    axes[i].set_ylabel('Concentration')
+
+plt.tight_layout()
+plt.show()
