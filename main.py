@@ -162,3 +162,8 @@ ax.legend()
 
 # Show the plot
 plt.show()
+
+#removing columns from training data that are not in test data and date column which shouldn't be predictive 
+train_updated_features = train_updated[train_updated.columns.difference(column_differences)]
+train_updated_features.drop('date', axis=1, inplace=True)
+train_updated_features
