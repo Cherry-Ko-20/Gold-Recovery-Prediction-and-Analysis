@@ -78,3 +78,18 @@ source.dropna(subset=['rougher.output.recovery', 'final.output.recovery'], inpla
 source_update = source.fillna(method='ffill')
 source_update
 
+#creating train_updated using same rows as in train from source since missing values filled 
+train_updated = source[source['date'].isin(train['date'])]
+train_updated.describe()
+
+#creating test_updated using same rows as in train from source since missing values filled 
+test_updated = source[source['date'].isin(test['date'])]
+
+#removing column_differences from test_updated 
+test_updated = test_updated[test_updated.columns.difference(column_differences)]
+print(test_updated)
+
+#dropping any rows that still have missing values 
+source.dropna(how='any', inplace=True, axis=0)
+train_updated.dropna(how='any', inplace=True, axis=0)
+test_updated.dropna(how='any', inplace=True, axis=0)
