@@ -167,3 +167,61 @@ plt.show()
 train_updated_features = train_updated[train_updated.columns.difference(column_differences)]
 train_updated_features.drop('date', axis=1, inplace=True)
 train_updated_features
+
+#creating train target
+train_updated_target = train_updated[['rougher.output.recovery', 'final.output.recovery']].copy()
+train_updated_target
+
+def smape(target, prediction): 
+    return (1/len(target)) * sum(abs(prediction - target) / ((abs(target) + abs(prediction)) / 2) * 100)
+
+def final_smape(target, prediction):
+    rougher = smape(target[:, 0], prediction[:, 0])
+    final = smape(target[:, 1], prediction[:, 1])
+    return rougher * 0.25 + final * 0.75
+
+#silencing warnings 
+import sys
+import warnings 
+if not sys.warnoptions:
+    warnings.simplefilter("ignore")
+
+    #setting scorer
+smape_score = make_scorer(final_smape)
+
+#saving values from training features and target
+X_train = train_updated_features.values
+y_train = train_updated_target.values
+
+#training linearregression and evaluating using cross validation 
+lr = LinearRegression().fit(X_train, y_train)
+scores_lr = cross_val_score(lr, X_train, y_train, cv=5, scoring=smape_score)
+print("Mean sMAPE:", np.nanmean(scores_lr))
+scores_lr
+
+#training randomforestregressor and evaluating using cross validation 
+for depth in range(1,6): 
+    r_forest = RandomForestRegressor(n_estimators = 50, max_depth=depth, random_state=
+                                12345).fit(X_train, y_train)
+    scores_r_forest = cross_val_score(r_forest, X_train, y_train, cv=5, scoring=smape_score)
+    print("Depth: ", depth, "Mean sMAPE:", np.nanmean(scores_r_forest))
+    print("Cross validation scores: ", scores_r_forest)
+    print()
+
+
+
+# Define a simpler parameter grid to start with
+param_grid = {
+    'n_estimators': [50, 100],
+    'max_depth': [5, 10],
+}
+
+rf_model = RandomForestRegressor(random_state=12345)
+smape_score = make_scorer(final_smape, greater_is_better=False)
+
+# Initialize GridSearchCV with the model, parameter grid, and scoring metric
+grid_search = GridSearchCV(rf_model, param_grid, scoring=smape_score, n_jobs=-1, cv=5, verbose=4)
+grid_search.fit(X_train, y_train)
+best_rf_model = grid_search.best_estimator_
+
+print("Mean sMAPE for the best Random Forest model:", np.abs(grid_search.best_score_))
