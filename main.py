@@ -137,3 +137,28 @@ for i, concentration_variable in enumerate(total_concentration_variables):
 
 plt.tight_layout()
 plt.show()
+
+# Create a figure and axis
+fig, ax = plt.subplots(figsize=(10, 6))
+
+# Create normalized histograms for the training and test sets
+train_size = train['rougher.input.feed_size']
+test_size = test['rougher.input.feed_size']
+
+# Define the number of bins for the histograms
+bins = 50
+
+# Plot the normalized histograms
+ax.hist(train_size, bins=bins, density=True, alpha=0.7, label='Training Set')
+ax.hist(test_size, bins=bins, density=True, alpha=0.7, label='Test Set')
+
+# Set axis labels and title
+ax.set_xlabel('Feed Particle Size')
+ax.set_ylabel('Density')
+ax.set_title('Normalized Feed Particle Size Distribution Comparison')
+
+# Add a legend to distinguish the datasets
+ax.legend()
+
+# Show the plot
+plt.show()
