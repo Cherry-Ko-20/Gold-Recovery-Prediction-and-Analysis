@@ -91,7 +91,7 @@ print(test_updated)
 
 #dropping any rows that still have missing values 
 source.dropna(how='any', inplace=True, axis=0)
-train_updated= train_updated.dropna(how='any', inplace=True, axis=0)
+train_updated.dropna(how='any', inplace=True, axis=0)
 test_updated.dropna(how='any', inplace=True, axis=0)
 
 # Create subplots to visualize concentration changes
@@ -164,13 +164,15 @@ ax.legend()
 plt.show()
 
 #removing columns from training data that are not in test data and date column which shouldn't be predictive 
+
 train_updated_features = train_updated[train_updated.columns.difference(column_differences)]
-train_updated_features.drop('date', axis=1, inplace=True)
+train_updated_features = train_updated_features.drop('date', axis=1)
 train_updated_features
 
 #creating train target
 train_updated_target = train_updated[['rougher.output.recovery', 'final.output.recovery']].copy()
 train_updated_target
+
 
 def smape(target, prediction): 
     return (1/len(target)) * sum(abs(prediction - target) / ((abs(target) + abs(prediction)) / 2) * 100)
@@ -180,7 +182,7 @@ def final_smape(target, prediction):
     final = smape(target[:, 1], prediction[:, 1])
     return rougher * 0.25 + final * 0.75
 
-#silencing warnings 
+#silencing warnings  
 import sys
 import warnings 
 if not sys.warnoptions:
