@@ -112,3 +112,13 @@ for i, metal in enumerate(metals):
 
 plt.tight_layout()
 plt.show()
+
+# Calculate total concentrations at different stages
+train['total_concentration_raw'] = train.filter(like='rougher.input.feed_', axis=1).sum(axis=1)
+train['total_concentration_rougher'] = train.filter(like='rougher.output.concentrate_', axis=1).sum(axis=1)
+train['total_concentration_final'] = train.filter(like='final.output.concentrate_', axis=1).sum(axis=1)
+
+# Examine summary statistics
+print("Summary Statistics of Total Concentrations:")
+print(train[['total_concentration_raw', 'total_concentration_rougher', 'total_concentration_final']].describe())
+
