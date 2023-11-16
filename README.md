@@ -9,12 +9,13 @@ This project focuses on predicting the gold recovery process in a mining industr
 - [Introduction](#introduction)
 - [Data](#data)
 - [Project Structure](#project-structure)
+- [Installation](#installation)
 - [Dependencies](#dependencies)
-- [Setup](#setup)
 - [Usage](#usage)
 - [Results](#results)
-- [Acknowledgments](#acknowledgments)
-- [License](#license)
+- [Contribution](#contributing)
+- [Version History](#version-history)
+- [Copy Rights](#copy-right)
 
 ## Introduction
 
@@ -34,6 +35,7 @@ The project is structured as follows:
 
 ## Installation
 > Clone this repository to your local machine. 
+> https://github.com/Cherry-Ko-20/Gold-Recovery-Prediction-and-Analysis.git
 > Install the required packages using the following command: (pip install -r requirements.txt)
 
 Install the dependencies using:
@@ -50,6 +52,15 @@ The following Python libraries are used in this project:
 - Scikit-learn
 - Matplotlib
 - Seaborn
+
+## Usage 
+>The main.py script covers the entire workflow, including data preprocessing, feature engineering, model training, and evaluation. Adjust parameters, models, or features as needed for further experimentation.
+
+## Results
+
+This project focused on the analysis and optimization of the gold recovery process in a mining operation.
+The best model was selected based on performance in cross-validation and tested using the test dataset.
+In our case, the Random Forest Regressor demonstrated superior performance compared to the Linear Regressor. The lower sMAPE mean values obtained from the Random Forest model indicate its potential to deliver better predictions for the mining organization's gold recovery process. This suggests that the Random Forest model is a reliable choice for optimizing the gold recovery process in the mining operation.
 
 ## Contributing
 > Contributions are welcome! If you find any issues or improvements, please submit a pull request.
