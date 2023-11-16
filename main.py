@@ -166,20 +166,27 @@ plt.show()
 #removing columns from training data that are not in test data and date column which shouldn't be predictive 
 
 train_updated_features = train_updated[train_updated.columns.difference(column_differences)]
-train_updated_features = train_updated_features.drop('date', axis=1)
+train_updated_features.drop('date', axis=1, inplace=True)
 train_updated_features
 
 #creating train target
 train_updated_target = train_updated[['rougher.output.recovery', 'final.output.recovery']].copy()
 train_updated_target
 
-
 def smape(target, prediction): 
-    return (1/len(target)) * sum(abs(prediction - target) / ((abs(target) + abs(prediction)) / 2) * 100)
+    return (1/len(target)) * np.sum(2 * np.abs(prediction - target) / (np.abs(target) + np.abs(prediction)) * 100)
 
 def final_smape(target, prediction):
+    # Ensure the lengths of target and prediction are the same
+    min_length = min(len(target), len(prediction))
+    
+    # Truncate or pad arrays to the same length
+    target = target[:min_length]
+    prediction = prediction[:min_length]
+    
     rougher = smape(target[:, 0], prediction[:, 0])
     final = smape(target[:, 1], prediction[:, 1])
+    
     return rougher * 0.25 + final * 0.75
 
 #silencing warnings  
